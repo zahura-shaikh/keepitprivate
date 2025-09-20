@@ -1,37 +1,19 @@
-name: Run Python Code
+name: Run Python Script
 
-# Trigger workflow on push or pull request
-on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+on: [push]
 
 jobs:
-  run-python:
+  build:
     runs-on: ubuntu-latest
-
     steps:
-    # 1️⃣ Checkout the repository
-    - name: Checkout repo
-      uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run script
+        run: python script.py
 
-    # 2️⃣ Set up Python
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-
-    # 3️⃣ Install dependencies if requirements.txt exists
-    - name: Install dependencies
-      run: |
-        if [ -f requirements.txt ]; then
-          pip install -r requirements.txt
-        fi
-
-    # 4️⃣ Run your Python script(s)
-    - name: Run Python script
-      run: |
         python your_script.py
